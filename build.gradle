@@ -1,0 +1,16 @@
+plugins {
+    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
+}
+
+nexusPublishing {
+    repositories {
+        sonatype()
+    }
+}
+
+def projectsVersion = '4.0.0-beta4-SNAPSHOT'
+
+allprojects {
+    group = 'com.github.gumtreediff'
+    version = projectsVersion
+}

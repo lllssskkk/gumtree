@@ -1,0 +1,27 @@
+plugins {
+	id 'java-conv'
+	id 'maven-conv'
+	id 'jacoco'
+}
+
+description = 'GumTree core module.'
+
+dependencies {
+	implementation 'com.github.mpkorstanje:simmetrics-core:4.1.1'
+	implementation 'it.unimi.dsi:fastutil:8.5.12'
+	implementation 'com.google.code.gson:gson:2.10.1'
+	implementation 'org.jgrapht:jgrapht-core:1.5.1'
+}
+
+test {
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		html.required = true
+		xml.required = false
+		csv.required = false
+	}
+}

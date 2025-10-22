@@ -1,0 +1,54 @@
+plugins {
+	id 'java-conv'
+	id 'com.gradleup.shadow' version '8.3.5'
+	id 'application'
+}
+
+description = 'GumTree minimal distribution.'
+
+dependencies {
+	implementation project(':core')
+	implementation project(':client')
+	implementation project(':client.diff')
+	implementation project(':gen.css')
+	implementation project(':gen.jdt')
+	implementation project(':gen.treesitter-ng')
+	implementation project(':gen.xml')
+	implementation project(':gen.yaml')
+	implementation project(':gen.json')
+}
+
+shadowJar {
+	archiveBaseName.set('gumtree')
+	archiveClassifier.set('')
+	archiveVersion.set('')
+	mergeServiceFiles()
+	mergeServiceFiles {
+		path = 'META-INF/annotations'
+	}
+}
+
+distributions {
+	shadow {
+		distributionBaseName = 'gumtree'
+	}
+}
+
+application {
+	mainClass = 'com.github.gumtreediff.client.Run'
+	applicationName = 'gumtree'
+}
+
+tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+	archiveBaseName.set('gumtree')
+}
+
+shadowDistZip.enabled = true
+distTar.enabled = false
+distZip.enabled = false
+startScripts.enabled = false
+shadowDistTar.enabled = false
+
+jar.enabled = false
+
+build.finalizedBy installShadowDist

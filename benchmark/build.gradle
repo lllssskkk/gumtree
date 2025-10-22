@@ -1,0 +1,42 @@
+plugins {
+    id 'java-conv'
+    id 'application'
+}
+
+dependencies {
+    implementation project(':core')
+    implementation project(':gen.jdt')
+    implementation project(':gen.treesitter-ng')
+}
+
+jar.enabled = false
+run.enabled = false
+
+tasks.register('execNotebook', Exec) {
+    // jupyter nbconvert --execute --to html benchmark.ipynb
+    commandLine "jupyter", "nbconvert", "--execute", "--to", "html", "${project.layout.projectDirectory.file("src/main/python/analysis.ipynb")}", "--output-dir='${project.layout.buildDirectory.get()}/reports'"
+}
+
+tasks.register('runOnDefects4J', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
+    args = [project.layout.projectDirectory.dir("datasets/defects4j"), "${project.layout.buildDirectory.get()}/reports/defects4j.csv"]
+}
+
+tasks.register('runOnGhJava', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
+    args = [project.layout.projectDirectory.dir("datasets/gh-java"), "${project.layout.buildDirectory.get()}/reports/gh-java.csv"]
+}
+
+tasks.register('runOnGhPython', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
+    args = [project.layout.projectDirectory.dir("datasets/gh-python"), "${project.layout.buildDirectory.get()}/reports/gh-java.csv"]
+}
+
+tasks.register('runOnBugsInPy', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.github.gumtree.benchmark.RunOnDataset'
+    args = [project.layout.projectDirectory.dir("datasets/gh-python"), "${project.layout.buildDirectory.get()}/reports/bugsinpy.csv"]
+}
